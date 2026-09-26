@@ -44,12 +44,15 @@ const CurrencySelect = () => {
   const [showDropdown, toggleDropdown] = useState(false)
   const [currency, toggleCurrency] = useCurrentCurrency()
 
+  // Helper to determine the other currency based on current selection
   const getOther = () => {
     if (currency === 'USD') {
       return 'ETH'
-    } else {
+    } else if (currency === 'ETH') {
       return 'USD'
     }
+    // Default fallback assumes binary state or handles multi-token if needed
+    return currency === 'USD' ? 'ETH' : 'USD'
   }
 
   return (
@@ -62,7 +65,9 @@ const CurrencySelect = () => {
           <Option
             onClick={() => {
               toggleDropdown(!showDropdown)
-              toggleCurrency()
+              // toggleCurrency() typically swaps the internal state or accepts a new value
+              // Ensure we pass the new currency if the context expects it, otherwise it toggles
+              toggleCurrency(getOther())
             }}
           >
             {getOther()}
